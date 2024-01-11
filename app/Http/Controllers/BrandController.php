@@ -9,10 +9,22 @@ class BrandController extends Controller{
     // load index
     function index(){
         $arr = Brand::all();
-        var_dump($arr);
+        //var_dump($arr);
         $v = view('brand.index', ['arr' => $arr]);
         //var_dump($v);
         return $v;
+    }
+    // edit method
+    function edit(int $id, Request $r){
+        $msg = NULL;
+        if($r->isMethod('post')){
+            $data = $r->validate(['name' => 'required']);
+            if(Brand::edit($id, $data)){
+                return redirect('/brand');
+            }
+            $msg = 'Edit Failed';
+        }
+        return view('brand.edit', ['v' => Brand::findOrFail($id), 'msg' => $msg]);
     }
     // add method
     function add(Request $req){
